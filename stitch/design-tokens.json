@@ -1,0 +1,11 @@
+{
+  "--color-primary": "#5d6d7e",
+  "--color-background-light": "#f7f7f7",
+  "--color-background-dark": "#17191b",
+  "--font-display": "Space Grotesk, sans-serif",
+  "--radius-DEFAULT": "0.25rem",
+  "--radius-lg": "0.5rem",
+  "--radius-xl": "0.75rem",
+  "--radius-full": "9999px",
+  "--font-google-0": "Space Grotesk"
+}
