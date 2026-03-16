@@ -1,22 +1,27 @@
 /**
  * Pomodoro Timer - Core Timer Module
- * Handles countdown logic for 25-minute work sessions
+ * Handles countdown logic with circular progress ring animation
  */
+
+// Timer constants
+const WORK_TIME = 25 * 60; // 25 minutes in seconds
+const BREAK_TIME = 5 * 60; // 5 minutes in seconds
+const TOTAL_SESSIONS = 4;
+const ONE_SECOND_IN_MS = 1000;
 
 class PomodoroTimer {
     constructor() {
-        // Timer constants (in seconds)
-        this.WORK_TIME = 25 * 60; // 25 minutes
-        this.BREAK_TIME = 5 * 60;  // 5 minutes
-        this.PROGRESS_RING_RADIUS = 54;
-        
         // State
-        this.timeRemaining = this.WORK_TIME;
+        this.timeRemaining = WORK_TIME;
         this.isRunning = false;
         this.intervalId = null;
         this.currentSession = 1;
-        this.totalSessions = 4;
+        this.totalSessions = TOTAL_SESSIONS;
         this.isWorkPhase = true;
+        
+        // Progress ring constants
+        this.radius = 54;
+        this.circumference = 2 * Math.PI * this.radius;
         
         // DOM elements
         this.timerDisplay = null;
@@ -32,11 +37,13 @@ class PomodoroTimer {
         this.reset = this.reset.bind(this);
         this.tick = this.tick.bind(this);
         this.updateDisplay = this.updateDisplay.bind(this);
+        this.updateProgressRing = this.updateProgressRing.bind(this);
         this.formatTime = this.formatTime.bind(this);
     }
     
     /**
      * Initialize the timer with DOM elements
+     * @returns {PomodoroTimer} The initialized instance
      */
     init() {
         this.timerDisplay = document.getElementById('timer');
@@ -46,22 +53,59 @@ class PomodoroTimer {
         this.sessionInfo = document.getElementById('session-info');
         this.progressCircle = document.getElementById('progress-circle');
         
-        if (this.startBtn) {
-            this.startBtn.addEventListener('click', () => {
-                if (this.isRunning) {
-                    this.stop();
-                } else {
-                    this.start();
-                }
-            });
+        // Verify required DOM elements exist
+        if (!this.timerDisplay || !this.startBtn || !this.resetBtn) {
+            console.warn('PomodoroTimer: Required DOM elements not found. Timer will not function.');
+            return this;
         }
         
-        if (this.resetBtn) {
-            this.resetBtn.addEventListener('click', this.reset);
-        }
+        // Initialize progress ring
+        this.initializeProgressRing();
+        
+        this.startBtn.addEventListener('click', () => {
+            if (this.isRunning) {
+                this.stop();
+            } else {
+                this.start();
+            }
+        });
+        
+        this.resetBtn.addEventListener('click', this.reset);
         
         this.updateDisplay();
         return this;
+    }
+    
+    /**
+     * Initialize the SVG progress ring
+     * Sets up stroke-dasharray for proper animation
+     */
+    initializeProgressRing() {
+        if (this.progressCircle) {
+            // Set the stroke-dasharray to the circumference
+            this.progressCircle.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
+            // Start with full ring (no progress)
+            this.progressCircle.style.strokeDashoffset = this.circumference;
+        }
+    }
+    
+    /**
+     * Get the circumference of the progress ring
+     * @returns {number} The circumference value
+     */
+    getCircumference() {
+        return this.circumference;
+    }
+    
+    /**
+     * Calculate progress offset for the ring
+     * @param {number} elapsed - Elapsed time in seconds
+     * @param {number} total - Total time in seconds
+     * @returns {number} The stroke-dashoffset value
+     */
+    calculateProgressOffset(elapsed, total) {
+        const progress = elapsed / total;
+        return this.circumference - (progress * this.circumference);
     }
     
     /**
@@ -73,7 +117,7 @@ class PomodoroTimer {
             if (this.startBtn) {
                 this.startBtn.textContent = 'STOP';
             }
-            this.intervalId = setInterval(this.tick, 1000);
+            this.intervalId = setInterval(this.tick, ONE_SECOND_IN_MS);
         }
     }
     
@@ -86,7 +130,7 @@ class PomodoroTimer {
             if (this.startBtn) {
                 this.startBtn.textContent = 'START';
             }
-            if (this.intervalId !== null) {
+            if (this.intervalId) {
                 clearInterval(this.intervalId);
                 this.intervalId = null;
             }
@@ -98,7 +142,7 @@ class PomodoroTimer {
      */
     reset() {
         this.stop();
-        this.timeRemaining = this.WORK_TIME;
+        this.timeRemaining = WORK_TIME;
         this.isWorkPhase = true;
         this.updateDisplay();
     }
@@ -110,8 +154,7 @@ class PomodoroTimer {
         if (this.timeRemaining > 0) {
             this.timeRemaining--;
             this.updateDisplay();
-        }
-        if (this.timeRemaining === 0) {
+        } else {
             this.onTimerComplete();
         }
     }
@@ -134,13 +177,7 @@ class PomodoroTimer {
         }
         
         // Update progress ring
-        if (this.progressCircle) {
-            const totalTime = this.isWorkPhase ? this.WORK_TIME : this.BREAK_TIME;
-            const circumference = 2 * Math.PI * this.PROGRESS_RING_RADIUS; // r = 54
-            const progress = (totalTime - this.timeRemaining) / totalTime;
-            const offset = circumference - (progress * circumference);
-            this.progressCircle.style.strokeDashoffset = offset;
-        }
+        this.updateProgressRing();
         
         // Update phase badge
         if (this.phaseBadge) {
@@ -151,6 +188,19 @@ class PomodoroTimer {
         // Update session info
         if (this.sessionInfo) {
             this.sessionInfo.textContent = `Session ${this.currentSession} of ${this.totalSessions}`;
+        }
+    }
+    
+    /**
+     * Update the circular progress ring
+     * Ring fills clockwise as time elapses
+     */
+    updateProgressRing() {
+        if (this.progressCircle) {
+            const totalTime = this.isWorkPhase ? WORK_TIME : BREAK_TIME;
+            const elapsed = totalTime - this.timeRemaining;
+            const offset = this.calculateProgressOffset(elapsed, totalTime);
+            this.progressCircle.style.strokeDashoffset = offset;
         }
     }
     
@@ -186,16 +236,33 @@ class PomodoroTimer {
         this.timeRemaining = seconds;
         this.updateDisplay();
     }
+    
+    /**
+     * Get progress ring offset (for testing)
+     * @returns {number|null} Current stroke-dashoffset value
+     */
+    getProgressRingOffset() {
+        if (this.progressCircle) {
+            return parseFloat(this.progressCircle.style.strokeDashoffset);
+        }
+        return null;
+    }
 }
 
-// Initialize timer when DOM is ready
+// Initialize timer when DOM is ready (only if all required elements exist)
 if (typeof document !== 'undefined') {
-    const initializeTimer = () => new PomodoroTimer().init();
+    const initTimer = () => {
+        const timer = new PomodoroTimer().init();
+        // Only expose to window if initialization succeeded
+        if (timer.timerDisplay && timer.startBtn && timer.resetBtn) {
+            window.timerInstance = timer;
+        }
+    };
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeTimer);
+        document.addEventListener('DOMContentLoaded', initTimer);
     } else {
-        initializeTimer();
+        initTimer();
     }
 }
 

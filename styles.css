@@ -1,7 +1,7 @@
-/* design-tokens.css in stitch doesn't have work/break colors, add them */
+/* Note: design-tokens.css is loaded via <link> in index.html */
 :root {
-    --color-work: #E74C3C;
-    --color-break: #27AE60;
+    --color-phase-work: #E74C3C;
+    --color-phase-break: #27AE60;
 }
 
 * {
@@ -19,6 +19,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
@@ -29,7 +31,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    gap: 2.5rem;
+    gap: 2rem;
 }
 
 header h1 {
@@ -55,55 +57,38 @@ header h1 {
 }
 
 .phase-badge.work {
-    background-color: var(--color-work);
+    background-color: var(--color-phase-work, #E74C3C);
     color: white;
 }
 
 .phase-badge.break {
-    background-color: var(--color-break);
+    background-color: var(--color-phase-break, #27AE60);
     color: white;
 }
 
-.timer-display {
+/* Timer wrapper with progress ring */
+.timer-wrapper {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
-    padding: 1rem 0;
-}
-
-.timer {
-    font-size: 5rem;
-    line-height: 1;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.05em;
-    color: #f8fafc;
-}
-
-@media (min-width: 640px) {
-    .timer {
-        font-size: 6.25rem;
-    }
-}
-
-.session-info {
-    color: #94a3b8;
-    font-weight: 500;
-    font-size: 1.125rem;
 }
 
 .progress-container {
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: 280px;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .progress-ring {
-    transform: rotate(-90deg);
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    transform: rotate(-90deg);
 }
 
 .progress-ring-bg {
@@ -117,9 +102,38 @@ header h1 {
     stroke: var(--color-primary);
     stroke-width: 8;
     stroke-linecap: round;
-    stroke-dasharray: 339.292;
-    stroke-dashoffset: 339.292;
     transition: stroke-dashoffset 1s linear;
+}
+
+.timer-display {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.timer {
+    font-size: 3.5rem;
+    line-height: 1;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.05em;
+    color: #f8fafc;
+}
+
+@media (min-width: 640px) {
+    .timer {
+        font-size: 4rem;
+    }
+}
+
+.session-info {
+    color: #94a3b8;
+    font-weight: 500;
+    font-size: 1rem;
 }
 
 .controls {
@@ -128,7 +142,7 @@ header h1 {
     max-width: 320px;
     gap: 1rem;
     justify-content: center;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 
 .btn {
