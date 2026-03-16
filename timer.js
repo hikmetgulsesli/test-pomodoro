@@ -3,18 +3,20 @@
  * Handles countdown logic with circular progress ring animation
  */
 
+// Timer constants
+const WORK_TIME = 25 * 60; // 25 minutes in seconds
+const BREAK_TIME = 5 * 60; // 5 minutes in seconds
+const TOTAL_SESSIONS = 4;
+const ONE_SECOND_IN_MS = 1000;
+
 class PomodoroTimer {
     constructor() {
-        // Timer constants (in seconds)
-        this.WORK_TIME = 25 * 60; // 25 minutes
-        this.BREAK_TIME = 5 * 60;  // 5 minutes
-        
         // State
-        this.timeRemaining = this.WORK_TIME;
+        this.timeRemaining = WORK_TIME;
         this.isRunning = false;
         this.intervalId = null;
         this.currentSession = 1;
-        this.totalSessions = 4;
+        this.totalSessions = TOTAL_SESSIONS;
         this.isWorkPhase = true;
         
         // Progress ring constants
@@ -41,6 +43,7 @@ class PomodoroTimer {
     
     /**
      * Initialize the timer with DOM elements
+     * @returns {PomodoroTimer} The initialized instance
      */
     init() {
         this.timerDisplay = document.getElementById('timer');
@@ -50,22 +53,24 @@ class PomodoroTimer {
         this.sessionInfo = document.getElementById('session-info');
         this.progressCircle = document.getElementById('progress-circle');
         
+        // Verify required DOM elements exist
+        if (!this.timerDisplay || !this.startBtn || !this.resetBtn) {
+            console.warn('PomodoroTimer: Required DOM elements not found. Timer will not function.');
+            return this;
+        }
+        
         // Initialize progress ring
         this.initializeProgressRing();
         
-        if (this.startBtn) {
-            this.startBtn.addEventListener('click', () => {
-                if (this.isRunning) {
-                    this.stop();
-                } else {
-                    this.start();
-                }
-            });
-        }
+        this.startBtn.addEventListener('click', () => {
+            if (this.isRunning) {
+                this.stop();
+            } else {
+                this.start();
+            }
+        });
         
-        if (this.resetBtn) {
-            this.resetBtn.addEventListener('click', this.reset);
-        }
+        this.resetBtn.addEventListener('click', this.reset);
         
         this.updateDisplay();
         return this;
@@ -112,7 +117,7 @@ class PomodoroTimer {
             if (this.startBtn) {
                 this.startBtn.textContent = 'STOP';
             }
-            this.intervalId = setInterval(this.tick, 1000);
+            this.intervalId = setInterval(this.tick, ONE_SECOND_IN_MS);
         }
     }
     
@@ -137,7 +142,7 @@ class PomodoroTimer {
      */
     reset() {
         this.stop();
-        this.timeRemaining = this.WORK_TIME;
+        this.timeRemaining = WORK_TIME;
         this.isWorkPhase = true;
         this.updateDisplay();
     }
@@ -192,7 +197,7 @@ class PomodoroTimer {
      */
     updateProgressRing() {
         if (this.progressCircle) {
-            const totalTime = this.isWorkPhase ? this.WORK_TIME : this.BREAK_TIME;
+            const totalTime = this.isWorkPhase ? WORK_TIME : BREAK_TIME;
             const elapsed = totalTime - this.timeRemaining;
             const offset = this.calculateProgressOffset(elapsed, totalTime);
             this.progressCircle.style.strokeDashoffset = offset;
@@ -244,14 +249,20 @@ class PomodoroTimer {
     }
 }
 
-// Initialize timer when DOM is ready
+// Initialize timer when DOM is ready (only if all required elements exist)
 if (typeof document !== 'undefined') {
+    const initTimer = () => {
+        const timer = new PomodoroTimer().init();
+        // Only expose to window if initialization succeeded
+        if (timer.timerDisplay && timer.startBtn && timer.resetBtn) {
+            window.timerInstance = timer;
+        }
+    };
+
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            window.timerInstance = new PomodoroTimer().init();
-        });
+        document.addEventListener('DOMContentLoaded', initTimer);
     } else {
-        window.timerInstance = new PomodoroTimer().init();
+        initTimer();
     }
 }
 

@@ -29,7 +29,7 @@
                     <circle id="progress-circle" class="progress-ring-circle" cx="60" cy="60" r="54"></circle>
                 </svg>
                 <div class="timer-display">
-                    <div id="timer" class="timer">25:00</div>
+                    <div id="timer" class="timer" aria-live="polite">25:00</div>
                     <p id="session-info" class="session-info">Session 1 of 4</p>
                 </div>
             </div>
@@ -37,8 +37,8 @@
         
         <!-- Controls -->
         <div class="controls">
-            <button id="start-btn" class="btn btn-primary">START</button>
-            <button id="reset-btn" class="btn btn-secondary">RESET</button>
+            <button id="start-btn" type="button" class="btn btn-primary">START</button>
+            <button id="reset-btn" type="button" class="btn btn-secondary">RESET</button>
         </div>
     </main>
     

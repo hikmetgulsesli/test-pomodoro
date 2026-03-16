@@ -10,6 +10,10 @@ describe('PomodoroTimer', () => {
   });
 
   afterEach(() => {
+    // Stop any running timers to prevent interval leaking
+    if (timer && timer.isRunning) {
+      timer.stop();
+    }
     vi.useRealTimers();
     vi.restoreAllMocks();
   });
@@ -109,7 +113,8 @@ describe('PomodoroTimer', () => {
         timer.setTimeRemaining(0); // Timer completed
         timer.reset();
         
-        const offset = timer.calculateProgressOffset(0, timer.WORK_TIME);
+        const WORK_TIME = 25 * 60;
+        const offset = timer.calculateProgressOffset(0, WORK_TIME);
         expect(offset).toBe(timer.circumference);
       });
     });
@@ -137,8 +142,9 @@ describe('PomodoroTimer', () => {
   describe('Core Timer Functionality', () => {
     describe('Initial State', () => {
       it('should display 25:00 on initial load', () => {
+        const WORK_TIME = 25 * 60;
         const state = timer.getState();
-        expect(state.timeRemaining).toBe(25 * 60);
+        expect(state.timeRemaining).toBe(WORK_TIME);
         expect(timer.formatTime(state.timeRemaining)).toBe('25:00');
       });
 

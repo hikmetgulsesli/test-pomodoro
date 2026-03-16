@@ -1,4 +1,8 @@
-@import url('stitch/design-tokens.css');
+/* Note: design-tokens.css is loaded via <link> in index.html */
+:root {
+    --color-phase-work: #E74C3C;
+    --color-phase-break: #27AE60;
+}
 
 * {
     margin: 0;
@@ -53,12 +57,12 @@ header h1 {
 }
 
 .phase-badge.work {
-    background-color: #E74C3C;
+    background-color: var(--color-phase-work, #E74C3C);
     color: white;
 }
 
 .phase-badge.break {
-    background-color: #27AE60;
+    background-color: var(--color-phase-break, #27AE60);
     color: white;
 }
 
