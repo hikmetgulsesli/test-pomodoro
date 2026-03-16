@@ -20,6 +20,9 @@
   "homepage": "https://github.com/hikmetgulsesli/test-pomodoro#readme",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "eslint": "^10.0.3"
+    "@vitest/coverage-v8": "^4.1.0",
+    "eslint": "^10.0.3",
+    "jsdom": "^29.0.0",
+    "vitest": "^4.1.0"
   }
 }
