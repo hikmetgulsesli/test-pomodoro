@@ -1,0 +1,10 @@
+=== US-002: Circular Progress Ring ===
+COMPLETED: 2026-03-16T10:37:00Z
+FILES CHANGED: index.html, timer.js, styles.css, tests/timer.test.js, vitest.config.js
+KEY DECISIONS: 
+- Used SVG circle element with stroke-dasharray/stroke-dashoffset for smooth progress animation
+- Radius of 54px gives circumference of ~339.29px
+- Ring rotates -90deg to start from top and fill clockwise
+- Progress calculation: offset = circumference - (elapsed/total * circumference)
+- Integrated progress ring visually around timer display for better UX
+DEPENDENCIES ADDED: vitest, jsdom, @vitest/coverage-v8 (for testing)
