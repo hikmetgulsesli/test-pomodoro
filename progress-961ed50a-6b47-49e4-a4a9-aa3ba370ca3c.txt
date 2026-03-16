@@ -1,0 +1,26 @@
+=== US-001: Core Timer - Countdown Logic ===
+COMPLETED: 2026-03-16T10:30:51Z
+FILES_CHANGED:
+  - index.html (main HTML structure matching Stitch design)
+  - styles.css (dark theme with design tokens)
+  - timer.js (PomodoroTimer class with countdown logic)
+  - tests/timer.test.js (18 comprehensive tests)
+  - vitest.config.js (test configuration)
+  - package.json (updated scripts)
+
+KEY_DECISIONS:
+  - Used vanilla HTML/CSS/JS as specified (no framework)
+  - Implemented PomodoroTimer class with clean state management
+  - Used SVG circle for circular progress bar with stroke-dashoffset
+  - Set up Vitest with jsdom for DOM testing
+  - Followed Stitch design exactly (colors, fonts, layout)
+
+DEPENDENCIES_ADDED:
+  - vitest (testing framework)
+  - jsdom (DOM environment for tests)
+  - @vitest/coverage-v8 (coverage reporting)
+
+TEST_RESULTS: 18/18 tests passing
+LINT_STATUS: Clean (no warnings or errors)
+
+PR_URL: https://github.com/hikmetgulsesli/test-pomodoro/pull/1
