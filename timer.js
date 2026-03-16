@@ -8,6 +8,7 @@ class PomodoroTimer {
         // Timer constants (in seconds)
         this.WORK_TIME = 25 * 60; // 25 minutes
         this.BREAK_TIME = 5 * 60;  // 5 minutes
+        this.PROGRESS_RING_RADIUS = 54;
         
         // State
         this.timeRemaining = this.WORK_TIME;
@@ -85,7 +86,7 @@ class PomodoroTimer {
             if (this.startBtn) {
                 this.startBtn.textContent = 'START';
             }
-            if (this.intervalId) {
+            if (this.intervalId !== null) {
                 clearInterval(this.intervalId);
                 this.intervalId = null;
             }
@@ -109,7 +110,8 @@ class PomodoroTimer {
         if (this.timeRemaining > 0) {
             this.timeRemaining--;
             this.updateDisplay();
-        } else {
+        }
+        if (this.timeRemaining === 0) {
             this.onTimerComplete();
         }
     }
@@ -134,7 +136,7 @@ class PomodoroTimer {
         // Update progress ring
         if (this.progressCircle) {
             const totalTime = this.isWorkPhase ? this.WORK_TIME : this.BREAK_TIME;
-            const circumference = 2 * Math.PI * 54; // r = 54
+            const circumference = 2 * Math.PI * this.PROGRESS_RING_RADIUS; // r = 54
             const progress = (totalTime - this.timeRemaining) / totalTime;
             const offset = circumference - (progress * circumference);
             this.progressCircle.style.strokeDashoffset = offset;
@@ -188,12 +190,12 @@ class PomodoroTimer {
 
 // Initialize timer when DOM is ready
 if (typeof document !== 'undefined') {
+    const initializeTimer = () => new PomodoroTimer().init();
+
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            window.timerInstance = new PomodoroTimer().init();
-        });
+        document.addEventListener('DOMContentLoaded', initializeTimer);
     } else {
-        window.timerInstance = new PomodoroTimer().init();
+        initializeTimer();
     }
 }
 

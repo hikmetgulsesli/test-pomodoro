@@ -1,4 +1,8 @@
-@import url('design-tokens.css');
+/* design-tokens.css in stitch doesn't have work/break colors, add them */
+:root {
+    --color-work: #E74C3C;
+    --color-break: #27AE60;
+}
 
 * {
     margin: 0;
@@ -15,7 +19,6 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    antialiased;
 }
 
 .container {
@@ -52,12 +55,12 @@ header h1 {
 }
 
 .phase-badge.work {
-    background-color: #E74C3C;
+    background-color: var(--color-work);
     color: white;
 }
 
 .phase-badge.break {
-    background-color: #27AE60;
+    background-color: var(--color-break);
     color: white;
 }
 
