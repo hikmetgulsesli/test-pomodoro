@@ -1,0 +1,37 @@
+[
+  {
+    "screenId": "a2d7c45ac94e4699919524393f20e4ee",
+    "screenTitle": "Pomodoro Timer",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "button",
+        "label": "START",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "RESET",
+        "line": 63
+      }
+    ],
+    "navigation": [],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "START",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "RESET",
+        "line": 63
+      }
+    ],
+    "inputs": [],
+    "hardcodedData": [],
+    "totalInteractive": 2,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  }
+]
