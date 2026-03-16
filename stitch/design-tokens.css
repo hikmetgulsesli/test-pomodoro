@@ -1,12 +1,51 @@
 /* design-tokens.css -- auto-generated from Stitch HTML */
 :root {
+  /* Dark theme color palette from PRD */
+  --color-background: #1a1a2e;
+  --color-surface: #16213e;
+  --color-work-accent: #e94560;
+  --color-break-accent: #4ecca3;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-border: #334155;
+  
+  /* Legacy tokens for compatibility */
   --color-primary: #5d6d7e;
   --color-background-light: #f7f7f7;
   --color-background-dark: #17191b;
+  
+  /* Fonts */
   --font-display: Space Grotesk, sans-serif;
+  
+  /* Border radius */
   --radius-DEFAULT: 0.25rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
   --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-color: color 0.3s ease;
+  --transition-bg: background-color 0.3s ease;
+  --transition-transform: transform 0.2s ease;
+  --transition-all: all 0.3s ease;
+  
+  /* Google fonts */
   --font-google-0: Space Grotesk;
+}
+
+/* Mobile breakpoint tokens */
+@media (max-width: 480px) {
+  :root {
+    --timer-font-size: 56px;
+    --container-padding: 16px;
+    --progress-ring-size: 220px;
+  }
+}
+
+@media (min-width: 481px) {
+  :root {
+    --timer-font-size: 64px;
+    --container-padding: 32px;
+    --progress-ring-size: 280px;
+  }
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="Pomodoro Zamanlayıcı - 25 dakika çalışma, 5 dakika mola" name="description"/>
+    <title>Pomodoro Zamanlayıcı</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="stitch/design-tokens.css" rel="stylesheet"/>
+    <link href="styles.css" rel="stylesheet"/>
+</head>
+<body>
+    <main class="container" role="main">
+        <header>
+            <h1>Pomodoro Zamanlayıcı</h1>
+        </header>
+        
+        <!-- Phase Indicator -->
+        <section class="phase-indicator" aria-label="Çalışma Fazı">
+            <span id="phase-badge" class="phase-badge work" role="status" aria-live="polite">ÇALIŞMA</span>
+        </section>
+        
+        <!-- Timer Display with Progress Ring -->
+        <section class="timer-wrapper" aria-label="Zamanlayıcı">
+            <div class="progress-container">
+                <svg class="progress-ring" viewBox="0 0 120 120" role="img" aria-label="İlerleme çemberi">
+                    <circle class="progress-ring-bg" cx="60" cy="60" r="54"></circle>
+                    <circle id="progress-circle" class="progress-ring-circle" cx="60" cy="60" r="54"></circle>
+                </svg>
+                <div class="timer-display">
+                    <time id="timer" class="timer" aria-live="polite" datetime="PT25M">25:00</time>
+                    <p id="session-info" class="session-info">Seans 1 / 4</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Controls -->
+        <section class="controls" aria-label="Kontroller">
+            <button 
+                id="start-btn" 
+                class="btn btn-primary" 
+                type="button"
+                aria-label="Zamanlayıcıyı başlat veya durdur"
+            >
+                BAŞLAT
+            </button>
+            <button 
+                id="reset-btn" 
+                class="btn btn-secondary" 
+                type="button"
+                aria-label="Zamanlayıcıyı sıfırla"
+            >
+                SIFIRLA
+            </button>
+        </section>
+    </main>
+    
+    <script src="timer.js"></script>
+</body>
+</html>
